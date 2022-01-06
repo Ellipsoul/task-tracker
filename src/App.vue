@@ -1,9 +1,16 @@
 <!-- Top level app to be mounted to the DOM -->
 <template>
   <div class="container">
-    <Header />
+    <Header @toggle-add-task="toggleAddTask" :showAddTask="showAddTask" />
+    <div v-if="showAddTask">
+      <AddTask @add-task="addTask" />
+    </div>
     <!-- Bind the tasks prop to the tasks data here -->
-    <Tasks :tasks="tasks" />
+    <Tasks
+      @toggle-reminder="toggleReminder"
+      @delete-task="deleteTask"
+      :tasks="tasks"
+    />
   </div>
 </template>
 
@@ -11,9 +18,10 @@
 import { defineComponent } from "vue";
 import Header from "./components/Header.vue";
 import Tasks from "./components/Tasks.vue";
+import AddTask from "./components/AddTask.vue";
 
-export type Task = {
-  id: number;
+export type TaskObject = {
+  id?: number;
   text: string;
   day: string;
   reminder: boolean;
@@ -25,11 +33,13 @@ export default defineComponent({
   components: {
     Header,
     Tasks,
+    AddTask,
   },
   data() {
     return {
       // Add any data that you want to be accessible to the components here
-      tasks: [] as Task[],
+      tasks: [] as TaskObject[],
+      showAddTask: false,
     };
   },
   // This is a lifecycle hook that is called when the component is mounted
@@ -55,6 +65,28 @@ export default defineComponent({
         reminder: true,
       },
     ];
+  },
+  methods: {
+    addTask(task: TaskObject): void {
+      this.tasks.push(task);
+    },
+    deleteTask(id: number): void {
+      if (confirm("Are you sure?")) {
+        // Delete the task from the tasks array
+        this.tasks = this.tasks.filter((task) => task.id !== id);
+        console.log("Delete task with id:", id);
+      }
+    },
+    toggleAddTask(): void {
+      this.showAddTask = !this.showAddTask;
+    },
+    toggleReminder(id: number): void {
+      // Find the task with the given id and toggle the reminder property
+      const task = this.tasks.find((task) => task.id === id);
+      if (task) {
+        task.reminder = !task.reminder;
+      }
+    },
   },
 });
 </script>
