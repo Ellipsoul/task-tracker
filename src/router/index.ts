@@ -7,11 +7,17 @@ const routes = [
     path: "/about",
     name: "About",
     component: About,
+    meta: {
+      title: "Task Tracker - About",
+    },
   },
   {
     path: "/",
     name: "Home",
     component: Home,
+    meta: {
+      title: "Task Tracker - Home",
+    },
   },
 ];
 

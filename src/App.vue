@@ -1,15 +1,10 @@
 <!-- Top level app to be mounted to the DOM -->
 <template>
   <div class="container">
-    <Header @toggle-add-task="toggleAddTask" :showAddTask="showAddTask" />
-    <div v-if="showAddTask">
-      <AddTask @add-task="addTask" />
-    </div>
-    <!-- Bind the tasks prop to the tasks data here -->
-    <Tasks
-      @toggle-reminder="toggleReminder"
-      @delete-task="deleteTask"
-      :tasks="tasks"
+    <Header
+      title="Task Tracker"
+      @toggle-add-task="toggleAddTask"
+      :showAddTask="showAddTask"
     />
     <router-view :showAddTask="showAddTask"></router-view>
     <Footer />
@@ -44,6 +39,13 @@ export default defineComponent({
   methods: {
     toggleAddTask(): void {
       this.showAddTask = !this.showAddTask;
+    },
+  },
+  watch: {
+    // Watch for route changes and set the title to the meta title
+    // of the current route
+    $route(to) {
+      document.title = to.meta.title;
     },
   },
 });
