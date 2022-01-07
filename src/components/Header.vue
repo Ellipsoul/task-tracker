@@ -3,6 +3,7 @@
   <header>
     <h1>{{ title }}</h1>
     <Button
+      v-show="homePage"
       @btn-click="$emit('toggle-add-task')"
       :text="showAddTask ? 'Close' : 'Add Task'"
       :color="showAddTask ? 'red' : 'green'"
@@ -12,8 +13,9 @@
 
 <script lang="ts">
 import Button from "./Button.vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   // All components must have a name
   name: "Header",
   // Define the props that this component will accept
@@ -32,7 +34,13 @@ export default {
     Button,
   },
   emits: ["toggle-add-task"],
-};
+  computed: {
+    // Redirect to home page from root route
+    homePage(): boolean {
+      return this.$route.path === "/";
+    },
+  },
+});
 </script>
 
 <style scoped>
