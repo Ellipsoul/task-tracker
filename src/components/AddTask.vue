@@ -46,7 +46,6 @@ export default defineComponent({
       }
 
       const newTask: TaskObject = {
-        id: Math.floor(Math.random() * 100_000),
         text: this.text,
         day: this.day,
         reminder: this.reminder,
